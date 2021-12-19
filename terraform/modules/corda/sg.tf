@@ -67,28 +67,55 @@ resource "aws_security_group" "corda_sg" {
     from_port         = 3000
     to_port           = 3000
     protocol          = "tcp"
-    security_groups   = [aws_security_group.alb_sg.id] 
+    cidr_blocks       = var.whitelist
   }
 
   ingress {
     from_port         = 5601
     to_port           = 5601
     protocol          = "tcp"
-    security_groups   = [aws_security_group.alb_sg.id] 
+    cidr_blocks       = var.whitelist
   }
 
   ingress {
     from_port         = 10005
     to_port           = 10005
     protocol          = "tcp"
-    security_groups   = [aws_security_group.alb_sg.id] 
+    cidr_blocks       = var.whitelist
   }
 
   ingress {
     from_port         = 10008
     to_port           = 10008
     protocol          = "tcp"
-    security_groups   = [aws_security_group.alb_sg.id] 
+    cidr_blocks       = var.whitelist
+  }
+  ingress {
+    from_port         = 3000
+    to_port           = 3000
+    protocol          = "tcp"
+    cidr_blocks       = ["${aws_eip.nlb_eip.public_ip}/32"]
+  }
+
+  ingress {
+    from_port         = 5601
+    to_port           = 5601
+    protocol          = "tcp"
+    cidr_blocks       = ["${aws_eip.nlb_eip.public_ip}/32"]
+  }
+
+  ingress {
+    from_port         = 10005
+    to_port           = 10005
+    protocol          = "tcp"
+    cidr_blocks       = ["${aws_eip.nlb_eip.public_ip}/32"]
+  }
+
+  ingress {
+    from_port         = 10008
+    to_port           = 10008
+    protocol          = "tcp"
+    cidr_blocks       = ["${aws_eip.nlb_eip.public_ip}/32"]
   }
 
   ingress {
@@ -97,83 +124,8 @@ resource "aws_security_group" "corda_sg" {
     protocol          = "tcp"
     security_groups   = [aws_security_group.bastion_sg.id] 
   }
-}
 
-resource "aws_security_group" "alb_sg" {
-  description = "${var.developer}s ALB sg"
-  name        = "${var.developer}s ALB sg"
-  vpc_id      = aws_vpc.corda_vpc.id
-
-  tags = {
-    Name = "${var.developer} ALB Security Group"
-    Owner = var.developer
-  }
-
-  ingress {
-    from_port         = 3000
-    to_port           = 3000
-    protocol          = "tcp"
-    cidr_blocks       = ["0.0.0.0/0"]
-  }
-
-  ingress {
-    from_port         = 5601
-    to_port           = 5601
-    protocol          = "tcp"
-    cidr_blocks       = ["0.0.0.0/0"]
-  }
-
-  ingress {
-    from_port         = 10005
-    to_port           = 10005
-    protocol          = "tcp"
-    cidr_blocks       = ["0.0.0.0/0"]
-  }
-
-  ingress {
-    from_port         = 10008
-    to_port           = 10008
-    protocol          = "tcp"
-    cidr_blocks       = ["0.0.0.0/0"]
-  }
-
-}
-
-resource "aws_security_group" "alb_outbound_sg" {
-  description = "${var.developer}s ALB outbound sg"
-  name        = "${var.developer}s ALB outbound sg"
-  vpc_id      = aws_vpc.corda_vpc.id
-
-  tags = {
-    Name = "${var.developer} ALB outbound Security Group"
-    Owner = var.developer
-  }
-
-  egress {
-    from_port         = 3000
-    to_port           = 3000
-    protocol          = "tcp"
-    security_groups   = [aws_security_group.corda_sg.id] 
-  }
-
-  egress {
-    from_port         = 5601
-    to_port           = 5601
-    protocol          = "tcp"
-    security_groups   = [aws_security_group.corda_sg.id] 
-  }
-
-  egress {
-    from_port         = 10005
-    to_port           = 10005
-    protocol          = "tcp"
-    security_groups   = [aws_security_group.corda_sg.id] 
-  }
-  egress {
-    from_port         = 10008
-    to_port           = 10008
-    protocol          = "tcp"
-    security_groups   = [aws_security_group.corda_sg.id] 
-  }
-
+  depends_on = [
+    aws_eip.nlb_eip
+  ]
 }

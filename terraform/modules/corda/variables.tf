@@ -10,7 +10,7 @@ variable "corda_prv_subnet_cidr" {
   
 }
 
-variable "corda_alb_subnet_cidr" {
+variable "corda_nlb_subnet_cidr" {
   
 }
 
@@ -38,10 +38,11 @@ variable "azs_list" {
 
 variable aws_region {
   type        = string
-  default     = "us-west-2"
+  default     = "eu-west-2"
   description = "aws region to create the resources"
 }
 
-variable "instance_az" {
-  
+
+variable "whitelist" {
+  default = ["0.0.0.0/0"]
 }

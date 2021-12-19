@@ -39,24 +39,24 @@ resource "aws_route_table_association" "private_corda_rt_association" {
   route_table_id = aws_route_table.corda_prv_rt.id
 }
 
-resource "aws_route_table" "corda_alb_pub_rt" {
+resource "aws_route_table" "corda_nlb_pub_rt" {
   vpc_id = aws_vpc.corda_vpc.id
-  count  = 3
+
 
   tags = {
-    Name = "${var.developer} Corda ALB Public RT"
+    Name = "${var.developer} Corda NLB Public RT"
     Owner = var.developer
   }
 
 }
-resource "aws_route" "alb_public_ig" {
-  route_table_id         = "${element(aws_route_table.corda_alb_pub_rt.*.id, count.index)}"
+resource "aws_route" "nlb_public_ig" {
+  route_table_id         = "${aws_route_table.corda_nlb_pub_rt.id}"
   destination_cidr_block = "0.0.0.0/0"
   gateway_id             = "${aws_internet_gateway.corda_igw.id}"
-  count          = 3
+
 }
-resource "aws_route_table_association" "alb_rt_association" {
-  subnet_id      = "${element(aws_subnet.corda_alb_public_subnet.*.id, count.index)}"
-  route_table_id = "${element(aws_route_table.corda_alb_pub_rt.*.id, count.index)}"
-  count          = 3
+resource "aws_route_table_association" "nlb_rt_association" {
+  subnet_id      = aws_subnet.corda_nlb_public_subnet.id
+  route_table_id = aws_route_table.corda_nlb_pub_rt.id
+
 }

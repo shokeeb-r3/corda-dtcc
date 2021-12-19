@@ -25,4 +25,14 @@ resource "aws_eip" "corda_eip" {
   }
 }
 
+resource "aws_eip" "nlb_eip" {
+  vpc = true
+
+  tags = {
+    Name = "${var.developer} NLB EIP"
+    Owner = var.developer
+  }
+}
+
+
 

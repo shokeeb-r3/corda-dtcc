@@ -10,8 +10,8 @@ output "developer" {
   value = var.developer
 }
 
-output "alb" {
-  value = aws_lb.corda_alb.dns_name
+output "nlb" {
+  value = aws_lb.corda_nlb.dns_name
 }
 
 resource "local_file" "ssh_config" {
