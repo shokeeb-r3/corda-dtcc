@@ -12,6 +12,7 @@ Terraform v1.0.8
 aws-cli/2.2.40
 ```
 
+
 [Administrators start here](#step-1-build-the-packer-environment) - Steps 1 and 2 will only need to be completed once by an administrator and used to create the ami's needed for the environments.
 
 [Developers start here](#step-8-provisioning-additional-test-environments) Your ami's should already have been created by the admin so you can skip to the deployment stage
@@ -68,6 +69,8 @@ cp config_* ~/.ssh/config
 3. make a note of the corda_private_ip, grafana_endpoint and the kibana_endpoint from the terraform output
 
 4. To test that the Corda finance demo app works and that your Corda network is working move to [Step 7 Testing the Corda finance demo app](#step-7-testing-the-corda-finance-demo-app)
+
+## Don't forget to whitelist your ip address. Find your public IP and add it into your quickstart file terraform/quickstart.tf. Examples have been given on lines 17 and 18 for either whitelisting a signle public ip address or whitelisting multiple public id addresses. If you leave this blank your corda network will be left open for anyone to access.
 
 # Step 4. Run your own cordapps
 
@@ -203,3 +206,5 @@ cp config_* ~/.ssh/config
 If this looks familiar it is because these are the same steps you ran in [step 3](#step-3-provision-your-environment)
 
 Once your environment is up and running you can load your own cordapps by running [step 4](#step-4-run-your-own-cordapps)
+
+## Don't forget to whitelist your ip address. Find your public IP and add it into your quickstart file terraform/quickstart.tf. Examples have been given on lines 17 and 18 for either whitelisting a signle public ip address or whitelisting multiple public id addresses. If you leave this blank your corda network will be left open for anyone to access.
