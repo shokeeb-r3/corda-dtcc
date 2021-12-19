@@ -82,6 +82,7 @@ cp config_* ~/.ssh/config
 ```
 ansible-playbook -i inventories/corda corda.yml
 ```
+Note: Only run the above if you have copied your new CordApp jar files into ansible/roles/corda-migration/files or it will be remove your existing app and fail to start
 
 # Step 5 Configure Grafana
 The grafana endpoint was output to the screen in part 2 of this guide.
