@@ -4,3 +4,7 @@ prerequisites/terraform.tfstate
 terraform/.terraform
 terraform/.terraform.lock.hcl
 terraform/terraform.tfstate
+terraform/config_*
+.gitignore
+terraform/terraform.tfstate.backup
+terraform/quickstart.pem

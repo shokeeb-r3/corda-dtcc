@@ -53,6 +53,7 @@ cd terraform
 terraform init --reconfigure
 terraform apply
 ```
+After your terraform has run it may take up to 5 minutes for the userdata to finish running and the endpoints to become healthy
 
 Once the terraform has run you will get the following outputs.
 ```
@@ -69,6 +70,7 @@ cp config_* ~/.ssh/config
 3. make a note of the corda_private_ip, grafana_endpoint and the kibana_endpoint from the terraform output
 
 4. To test that the Corda finance demo app works and that your Corda network is working move to [Step 7 Testing the Corda finance demo app](#step-7-testing-the-corda-finance-demo-app)
+
 
 ## Don't forget to whitelist your ip address. Find your public IP and add it into your quickstart file terraform/quickstart.tf. Examples have been given on lines 17 and 18 for either whitelisting a signle public ip address or whitelisting multiple public id addresses. If you leave this blank your corda network will be left open for anyone to access.
 
@@ -202,6 +204,8 @@ terraform init --reconfigure
 terraform apply
 cp config_* ~/.ssh/config
 ```
+
+After your terraform has run it may take up to 5 minutes for the userdata to finish running and the endpoints to become healthy
 
 If this looks familiar it is because these are the same steps you ran in [step 3](#step-3-provision-your-environment)
 

@@ -1,2 +1,2 @@
 [corda]
-corda-node ansible_host=10.1.2.187
+corda-node ansible_host=10.1.2.240
