@@ -38,7 +38,7 @@ variable "azs_list" {
 
 variable aws_region {
   type        = string
-  default     = "eu-west-2"
+  default     = "us-west-2"
   description = "aws region to create the resources"
 }
 

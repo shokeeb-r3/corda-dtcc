@@ -1,5 +1,5 @@
 variable "quickstart_aws_region" {
-  default = "eu-west-2"
+  default = "us-west-2"
 }
 
 variable "quickstart_cidr_prefix" {
