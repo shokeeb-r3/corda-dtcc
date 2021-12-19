@@ -1,0 +1,9 @@
+---
+- hosts: corda-node
+  become: true
+  become_user: root
+  become_method: sudo
+  roles:
+    - corda-migration
+
+...

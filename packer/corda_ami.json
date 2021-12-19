@@ -1,0 +1,55 @@
+{
+    "variables": {
+      "aws_ami_name": "Corda {{timestamp}}",
+      "aws_base_ami_name": "Corda_Base *"
+    },
+    "builders": [
+      {
+        "type": "amazon-ebs",
+        "region": "{{user `region`}}",
+        "source_ami_filter": {
+          "filters": {
+            "virtualization-type": "hvm",
+            "name": "{{user `aws_base_ami_name`}}",
+            "root-device-type": "ebs"
+          },
+          "owners": [
+            "{{user `aws_base_ami_owners`}}"
+          ],
+          "most_recent": true
+        },
+        "instance_type": "t3a.2xlarge",
+        "ssh_username": "centos",
+        "subnet_filter": {
+          "filters": {
+              "tag:Class": "build"
+            },
+            "most_free": true,
+            "random": false
+          },
+        "ami_name": "{{user `aws_ami_name`}}",
+        "ami_description": "This AMI is used for to run corda",
+        "ami_regions": ["eu-west-2", "us-west-2"],
+        "tags": {
+          "Name": "{{user `aws_ami_name`}}",
+          "OS_Version": "CentOS 7"
+        }
+      }
+    ],
+    "provisioners": [
+      {
+        "type": "ansible-local",
+        "playbook_file": "ansible/corda.yml",
+        "playbook_dir": "ansible",
+        "staging_directory": "/tmp/ansible-roles",
+        "clean_staging_directory": false
+      },
+      {
+        "type": "shell",
+        "inline": [
+          "sudo yum install -y patch"
+        ]
+      }
+    ]
+  }
+  

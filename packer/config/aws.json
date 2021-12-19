@@ -1,0 +1,5 @@
+{
+    "aws_base_ami_owners": "self",
+    "region": "us-west-2"
+  }
+  

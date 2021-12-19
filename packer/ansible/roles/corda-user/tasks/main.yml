@@ -1,0 +1,11 @@
+- name: Add a new user named corda
+  user:
+    name: corda
+    shell: /bin/bash
+    expires: -1
+
+- name: Add corda user to the sudoers
+  copy:
+    dest: "/etc/sudoers.d/corda"
+    content: "corda  ALL=(ALL)  NOPASSWD: ALL"
+

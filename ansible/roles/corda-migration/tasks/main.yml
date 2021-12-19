@@ -1,0 +1,26 @@
+- name: stop partya
+  shell:
+    cmd: "docker stop partya"
+
+- name: stop partyb
+  shell:
+    cmd: "docker stop partyb"
+
+- name: clear cordapps directory
+  shell:
+    cmd: "rm -r -f /usr/local/corda/mynetwork/shared/cordapps/*.jar"
+
+
+- name: Copy each file over that matches the given pattern
+  copy:
+    src: "{{ item }}"
+    dest: "/usr/local/corda/mynetwork/shared/cordapps"
+    owner: centos
+    group: centos
+    mode: 0644
+  with_fileglob:
+    - "files/*.jar"
+
+- name: start partya and partyb
+  shell:
+    cmd: "/usr/local/bin/docker-compose -f /usr/local/corda/mynetwork/docker-compose.yml up -d"

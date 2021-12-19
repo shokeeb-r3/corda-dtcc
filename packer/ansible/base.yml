@@ -1,0 +1,12 @@
+---
+- hosts: localhost
+  user: root
+  become: yes
+  roles:
+    - ansible-user
+    - corda-user
+    - { role: geerlingguy.java }
+    - aws
+    - ssmagent
+    - geerlingguy.docker
+    - docker-compose

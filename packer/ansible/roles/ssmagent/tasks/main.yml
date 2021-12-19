@@ -1,0 +1,33 @@
+---
+- name: Install ssmagent
+  yum:
+    name: "https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_amd64/amazon-ssm-agent.rpm"
+    state: present
+
+- name: Copy configuration template
+  template:
+    dest: "/etc/amazon/ssm/seelog.xml"
+    src: "{{ item }}"
+    mode: 0755
+  with_items:
+    - seelog.xml
+
+- name: Create errors.log for ssm agent
+  file:
+    path: /var/log/amazon/ssm/errors.log
+    state: touch
+    mode: 0755
+
+- name: Starting SSM agent
+  service:
+    name: amazon-ssm-agent
+    enabled: yes
+    state: started
+
+- name: Change Log permissions
+  file:
+    path: "{{ item }}"
+    mode: 0755
+  with_items:
+    - /var/log/amazon/ssm/amazon-ssm-agent.log
+...

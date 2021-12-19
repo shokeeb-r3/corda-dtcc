@@ -1,0 +1,11 @@
+- name: Add a new user named ansible
+  user:
+    name: ansible
+    shell: /bin/bash
+    expires: -1
+
+- name: Add ansible user to the sudoers
+  copy:
+    dest: "/etc/sudoers.d/ansible"
+    content: "ansible  ALL=(ALL)  NOPASSWD: ALL"
+

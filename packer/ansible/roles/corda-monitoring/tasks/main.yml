@@ -1,0 +1,38 @@
+- name: Download prometheus driver
+  get_url:
+    url: https://repo1.maven.org/maven2/io/prometheus/jmx/jmx_prometheus_javaagent/0.13.0/jmx_prometheus_javaagent-0.13.0.jar
+    dest: /usr/local/corda/mynetwork/shared/drivers/jmx_prometheus_javaagent-0.13.0.jar
+    mode: '0440'
+
+- name: move prometheus file to server
+  copy:
+    src: "prometheus.yml"
+    dest: "/usr/local/corda/mynetwork/prometheus"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: move filebeat file to server
+  copy:
+    src: "filebeat.yml"
+    dest: "/usr/local/corda/mynetwork/filebeat"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: move config file to server
+  copy:
+    src: "config.yml"
+    dest: "/usr/local/corda/mynetwork/shared/drivers"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: move logstash file to server
+  copy:
+    src: "02-beats-input.conf"
+    dest: "/usr/local/corda/mynetwork/logstash"
+    owner: root
+    group: root
+    mode: 0644
+

@@ -1,0 +1,117 @@
+- name: create directory if they don't exist
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0775
+  loop:
+    - /usr/local/corda
+    - /usr/local/corda/mynetwork
+    - /usr/local/corda/mynetwork/shared
+    - /usr/local/corda/mynetwork/shared/additional-node-infos
+    - /usr/local/corda/mynetwork/shared/drivers
+    - /usr/local/corda/mynetwork/shared/cordapps
+    - /usr/local/corda/mynetwork/shared/db
+    - /usr/local/corda/mynetwork/prometheus
+    - /usr/local/corda/mynetwork/grafana
+    - /usr/local/corda/mynetwork/filebeat
+    - /usr/local/corda/mynetwork/logstash
+
+- name: Download bootstrapper
+  get_url:
+    url: https://software.r3.com/artifactory/corda-releases/net/corda/corda-tools-network-bootstrapper/4.8/corda-tools-network-bootstrapper-4.8.jar
+    dest: /usr/local/corda/mynetwork/corda-tools-network-bootstrapper-4.8.jar
+    mode: '0440'
+    owner: root
+    group: root
+
+- name: Download finance-contracts.jar
+  get_url:
+    url: https://software.r3.com/artifactory/corda-releases/net/corda/corda-finance-contracts/4.8/corda-finance-contracts-4.8.jar
+    dest: /usr/local/corda/mynetwork/shared/cordapps/corda-finance-contracts-4.8.jar
+    mode: '0440'
+    owner: root
+    group: root
+
+- name: Download finance-workflows.jar
+  get_url:
+    url: https://software.r3.com/artifactory/corda-releases/net/corda/corda-finance-workflows/4.8/corda-finance-workflows-4.8.jar
+    dest: /usr/local/corda/mynetwork/shared/cordapps/corda-finance-workflows-4.8.jar
+    mode: '0440'
+    owner: root
+    group: root
+
+- name: move conf files to server
+  copy:
+    src: "{{ item }}"
+    dest: "/usr/local/corda/mynetwork/"
+    owner: root
+    group: root
+    mode: 0644
+  with_items:
+    - partya_node.conf
+    - partyb_node.conf
+    - notary_node.conf
+    - docker-compose.yml
+
+- name: launch bootstrapper
+  shell: java -jar /usr/local/corda/mynetwork/corda-tools-network-bootstrapper-4.8.jar --dir=/usr/local/corda/mynetwork
+  become: true
+  become_user: root
+  become_method: sudo
+
+- name: Pause for 5 bootstrapper to complete
+  pause:
+    minutes: 5
+
+- name: find node info files
+  command: "find /usr/local/corda/mynetwork/partya/additional-node-infos/ -type f"
+  register: node_info_files
+
+- name: copy node info files
+  copy:
+    src: "{{ item }}" 
+    dest: "/usr/local/corda/mynetwork/shared/additional-node-infos/"
+    owner: root
+    group: root
+    remote_src: True
+    mode: 0644
+  with_items:
+  - "{{ node_info_files.stdout_lines }}"
+
+- name: copy network files
+  copy:
+    src: "/usr/local/corda/mynetwork/partya/network-parameters"
+    dest: "/usr/local/corda/mynetwork/shared/network-parameters"
+    owner: root
+    group: root
+    remote_src: True
+    mode: 0644
+
+
+- name: increase virtual memory
+  command: "sysctl -w vm.max_map_count=262144"
+  become: true
+  become_user: root
+  become_method: sudo
+
+- name: pull elk
+  shell:
+    cmd: "docker pull sebp/elk"
+
+- name: pull grafana
+  shell:
+    cmd: "docker pull grafana/grafana:latest"
+
+- name: pull corda
+  shell:
+    cmd: "docker pull corda/corda-zulu-java1.8-4.8:latest"
+
+- name: pull prometheus
+  shell:
+    cmd: "docker pull prom/prometheus:latest"
+
+- name: pull filebeat
+  shell:
+    cmd: "docker pull docker.elastic.co/beats/filebeat:7.7.1"

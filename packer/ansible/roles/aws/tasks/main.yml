@@ -1,0 +1,17 @@
+---
+- name: Download & unzip aws cli package
+  unarchive:
+    src: https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip
+    dest: /tmp
+    remote_src: yes
+
+- name: check if aws cli already installed
+  stat:
+    path: /usr/local/aws-cli/v2/current
+  register: awscli_installed
+
+- name: Install AWS cli
+  shell: >
+    /tmp/aws/install --bin-dir /usr/bin
+  when: not awscli_installed.stat.exists
+...

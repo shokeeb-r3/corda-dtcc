@@ -1,0 +1,6 @@
+prerequisites/.terraform
+prerequisites/.terraform.lock.hcl
+prerequisites/terraform.tfstate
+terraform/.terraform
+terraform/.terraform.lock.hcl
+terraform/terraform.tfstate

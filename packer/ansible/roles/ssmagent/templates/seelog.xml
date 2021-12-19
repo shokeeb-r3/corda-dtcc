@@ -1,0 +1,18 @@
+<!--amazon-ssm-agent uses seelog logging -->
+<!--Seelog has github wiki pages, which contain detailed how-tos references: https://github.com/cihub/seelog/wiki -->
+<!--Seelog examples can be found here: https://github.com/cihub/seelog-examples -->
+<seelog type="adaptive" mininterval="2000000" maxinterval="100000000" critmsgcount="500" minlevel="info">
+    <exceptions>
+        <exception filepattern="test*" minlevel="error"/>
+    </exceptions>
+    <outputs formatid="std:json">
+        <console formatid="std:json"/>
+        <rollingfile type="size" filename="/var/log/amazon/ssm/amazon-ssm-agent.log" maxsize="30000000" maxrolls="5"/>
+        <filter levels="error,critical" formatid="std:json">
+            <rollingfile type="size" filename="/var/log/amazon/ssm/errors.log" maxsize="10000000" maxrolls="5"/>
+        </filter>
+    </outputs>
+    <formats>
+        <format id="std:json" format='{"@timestamp":"%DateT%Time+0000","lev":"%Lev","msg":"%Msg"}%n'/>
+    </formats>
+</seelog>

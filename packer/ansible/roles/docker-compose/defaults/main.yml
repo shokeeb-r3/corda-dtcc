@@ -1,0 +1,7 @@
+---
+docker_compose_requirements:
+  - python
+
+docker_compose_pip_requirements:
+  - docker
+...
