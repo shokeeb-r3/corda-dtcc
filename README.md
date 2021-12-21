@@ -29,6 +29,7 @@ terraform apply
 # Step 2. Create your ami
 Once you have installed the prereqs build your images using the following commands:
 
+## SJW 12_21_2021 remove this section and send to Admin only for setup.
 
 1. Create base ami
 ```
@@ -69,7 +70,16 @@ cp config_* ~/.ssh/config
 4. To test that the Corda finance demo app works and that your Corda network is working move to [Step 7 Testing the Corda finance demo app](#step-7-testing-the-corda-finance-demo-app)
 
 
-## Don't forget to whitelist your ip address. Find your public IP and add it into your quickstart file terraform/quickstart.tf. Examples have been given on lines 17 and 18 for either whitelisting a signle public ip address or whitelisting multiple public id addresses. If you leave this blank your corda network will be left open for anyone to access.
+Don't forget to whitelist your ip address. Find your public IP and add it into your quickstart file terraform/quickstart.tf. Examples have been given on lines 17 and 18 for either whitelisting a signle public ip address or whitelisting multiple public id addresses. If you leave this blank your corda network will be left open for anyone to access.
+
+# SJW 12212021 provide examples of how to do this : 
+
+MacOS : Bring up Terminal window and type "curl ifconfig.me"
+Windows : Bring up cmd window, type "ipconfig" and look for Default Gateway
+
+
+
+#SJW Before Step 4 I think we need a section that shows user how to log into VM and run docker ps -a and show healthy ouput example. 
 
 # Step 4. Run your own cordapps
 

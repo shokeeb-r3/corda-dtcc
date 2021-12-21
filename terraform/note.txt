@@ -1,0 +1,5 @@
+quickstart_bastion_dns = "ec2-34-220-66-68.us-west-2.compute.amazonaws.com"
+quickstart_corda_private_ip = "10.1.2.223"
+quickstart_grafana_endpoint = "quickstarts-nlb-fd519795e0ce3a9c.elb.us-west-2.amazonaws.com:3000"
+quickstart_kibana_endpoint = "quickstarts-nlb-fd519795e0ce3a9c.elb.us-west-2.amazonaws.com:5601"
+quickstart_ssh_to_corda_instance = "ssh -i quickstart -F config_quickstart 10.1.2.223"
