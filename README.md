@@ -2,46 +2,18 @@ The terraform in this repo has been developed to run locally from each developer
 
 The aws authentication method used to test this guide was to set the AWS [environment variables](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-envvars.html?icmpid=docs_sso_user_portal) 
 
+
 # Prerequisites
 You will need to install the following applications onto your machine:
 
 ```
 ansible 2.11.6
-Packer v1.7.8
 Terraform v1.0.8
 aws-cli/2.2.40
 ```
 
 
-[Administrators start here](#step-1-build-the-packer-environment) - Steps 1 and 2 will only need to be completed once by an administrator and used to create the ami's needed for the environments.
-
-[Developers start here](#step-8-provisioning-additional-test-environments) Your ami's should already have been created by the admin so you can skip to the deployment stage
-
-# Step 1. Build the packer environment
-
-Create the build vpc for creating the corda ami's
-```
-cd prerequisites
-terraform init
-terraform apply
-```
-
-# Step 2. Create your ami
-Once you have installed the prereqs build your images using the following commands:
-
-
-1. Create base ami
-```
-cd  packer
-packer build -var-file="config/aws.json" corda_base_ami.json
-```
-2. Create Corda ami
-```
-cd packer (if you are not already in the directory)
-packer build -var-file="config/aws.json" corda_ami.json
-```
-
-# Step 3. Provision your environment
+# Step 1. Provision your environment
 The quickstart file inside the terraform directory has been created to get a corda network up and running as quick as possible. The first time you run this you will not need to make any changes to the file. To get the infrastructure up and running run the following commands.
 
 1. Run the terraform
@@ -66,12 +38,16 @@ cp config_* ~/.ssh/config
 ```
 3. make a note of the corda_private_ip, grafana_endpoint and the kibana_endpoint from the terraform output
 
-4. To test that the Corda finance demo app works and that your Corda network is working move to [Step 7 Testing the Corda finance demo app](#step-7-testing-the-corda-finance-demo-app)
+4. To test that the Corda finance demo app works and that your Corda network is working move to [Step 5 Testing the Corda finance demo app](#step-5-testing-the-corda-finance-demo-app)
 
 
 ## Don't forget to whitelist your ip address. Find your public IP and add it into your quickstart file terraform/quickstart.tf. Examples have been given on lines 17 and 18 for either whitelisting a signle public ip address or whitelisting multiple public id addresses. If you leave this blank your corda network will be left open for anyone to access.
 
-# Step 4. Run your own cordapps
+You can find your public ip by running one of the following commands:
+MacOS : Bring up Terminal window and type "curl ifconfig.me"
+Windows : The fastest way on windows is to use [WhatIsMyIP.com](WhatIsMyIP.com)
+
+# Step 2. Run your own cordapps
 
 1. Copy your cordapp jar files into ansible/roles/corda-migration/files
 2. Update your corda_private_ip from the terraform steps into  corda-dtcc/ansible/inventories/corda (replace the placeholder ip 10.1.2.187)
@@ -81,7 +57,7 @@ ansible-playbook -i inventories/corda corda.yml
 ```
 Note: Only run the above if you have copied your new CordApp jar files into ansible/roles/corda-migration/files or it will be remove your existing app and fail to start
 
-# Step 5 Configure Grafana
+# Step 3 Configure Grafana
 The grafana endpoint was output to the screen in part 2 of this guide.
 
 Grafana will ask you for a login, the default admin login is:
@@ -113,7 +89,7 @@ Boom, a dashboard appears!
 
 ![Grafana Corda dashboard](resources/grafana-corda-dashboard.png)
 
-# Step 6 Configure Kibana
+# Step 4 Configure Kibana
 
 Open the kibana endpoint in your browser
 
@@ -141,7 +117,7 @@ Click on the `Discover` icon on the left pane, you should see some logs:
 
 ![Kibana discover](resources/kibana-discover.png)
 
-# Step 7 Testing the Corda finance demo app
+# Step 5 Testing the Corda finance demo app
 
 SSH into the PartyA node Crash shell:
 
@@ -160,7 +136,12 @@ You can see the available commands by typing 'help'.
 Mon Jun 15 07:52:13 GMT 2020>>>
 ```
 
-Let's execute a `CashIssueAndPaymentFlow`:
+Let's execute a `CashIssueAndPaymentFlow`: You can do this by running the following command:
+```
+flow start CashIssueAndPaymentFlow amount: 1000 GBP, issueRef: TestTransaction, recipient: PartyB, anonymous: false, notary: Notary
+```
+
+Your output will be as below if everything has been setup correctly.
 
 ```bash
 Mon Jun 15 07:53:52 GMT 2020>>> flow start CashIssueAndPaymentFlow amount: 1000 GBP, issueRef: TestTransaction, recipient: PartyB, anonymous: false, notary: Notary
@@ -188,8 +169,7 @@ Mon Jun 15 07:53:52 GMT 2020>>> flow start CashIssueAndPaymentFlow amount: 1000 
 Flow completed with result: Result(stx=SignedTransaction(id=FB08662B2E0A19ECF9B0E3E44D2DF25934F9576DBF262D794EE2C795C3269503), recipient=O=PartyB, L=London, C=GB)
 ```
 
-# Step 8 Provisioning additional test environments
-Steps 1 and 2 only needed to be run once. Any subsequent runs only require the terraform to create the environment. 
+# Step 6 Provisioning additional test environments
 
 As we are using a terraform module to create the infrastructure for us, the easiest way to do this for us is to use the quickstart.tf as a template file. If you have already created an environment in step 3 using the quickstart.tf file and would like to keep that environment then duplicate the file and make the following changes:
 * edit the file to change any occurences of the word 'quickstart' to your name (command + shift + l selects all occurences of a string on vscode)
@@ -205,8 +185,39 @@ cp config_* ~/.ssh/config
 
 After your terraform has run it may take up to 5 minutes for the userdata to finish running and the endpoints to become healthy
 
-If this looks familiar it is because these are the same steps you ran in [step 3](#step-3-provision-your-environment)
+If this looks familiar it is because these are the same steps you ran in [step 1](#step-1-provision-your-environment)
 
-Once your environment is up and running you can load your own cordapps by running [step 4](#step-4-run-your-own-cordapps)
+Once your environment is up and running you can load your own cordapps by running [step 2](#step-2-run-your-own-cordapps)
 
 ## Don't forget to whitelist your ip address. Find your public IP and add it into your quickstart file terraform/quickstart.tf. Examples have been given on lines 17 and 18 for either whitelisting a signle public ip address or whitelisting multiple public id addresses. If you leave this blank your corda network will be left open for anyone to access.
+
+
+# Troubleshooting
+
+In order to troubleshoot any issues with your docker containers you can run the following commands
+
+sudo docker ps -a
+
+sudo docker container ps -a - shows all containers running or nor running
+sudo docker-compose -f ./mynetwork/docker-compose.yml up -d - starts all docker containers listed in docker-compose.yml
+sudo docker stop $(docker ps -a -q) - stops all docker containers
+sudo docker container rm CONTAINER ID - removes container
+sudo docker container run IMAGE ID - starts container from image
+sudo docker container pause IMAGE ID - pauses container
+sudo docker container unpause IMAGE ID - unpauses container
+sudo docker images - lists all docker images
+sudo docker container stop CONTAINER ID - stops container gracefully (sig stop)
+sudo docker container kill CONTAINER ID - kills container (sig kill)
+sudo docker container inspect IMAGE ID - shows you the details of container
+sudo docker container prune - removes all stopped containers
+sudo docker system df - shows disk usage of docker image
+sudo docker logs -f IMAGE ID - shows you the logs of the running container
+sudo docker stats CONTAINER ID - provides statistics such as CPU%, MEM Usage
+
+The docker container names can be used instead of the Container ID's e.g. partya, partyb, grafana, kibana, notary
+
+The most common commands you are likely to use are:
+sudo docker ps -a
+sudo docker logs -f partya
+sudo docker logs -f partyb
+sudo docker logs -f notary
