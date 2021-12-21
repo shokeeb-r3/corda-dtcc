@@ -15,7 +15,7 @@ module "quickstart_corda_instance" {
 
   # uncomment one of these two lines and add your ip address/addresses
   # whitelist = ["151.230.0.17/32", "18.133.200.210/32"]
-  # whitelist = ["151.230.0.17/32"]
+   whitelist = ["74.73.32.245/32"]
 
   corda_vpc_cidr = "${var.quickstart_cidr_prefix}.0.0/16"
   corda_pub_subnet_cidr = "${var.quickstart_cidr_prefix}.1.0/24"
