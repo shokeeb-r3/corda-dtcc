@@ -172,6 +172,9 @@ Mon Jun 15 07:52:13 GMT 2020>>>
 
 Let's execute a `CashIssueAndPaymentFlow`:
 
+## SJW lets separate out the flow start command as a separate dialog, then show the output in subsequent dialog. Right now if I click on "Copy" in the readme
+## it collects both input and output below
+
 ```bash
 Mon Jun 15 07:53:52 GMT 2020>>> flow start CashIssueAndPaymentFlow amount: 1000 GBP, issueRef: TestTransaction, recipient: PartyB, anonymous: false, notary: Notary
 
