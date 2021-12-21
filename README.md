@@ -29,16 +29,13 @@ terraform apply
 # Step 2. Create your ami
 Once you have installed the prereqs build your images using the following commands:
 
-1. Install External roles
-```
-ansible-galaxy install -r packer/ansible/roles/requirements.yml --roles-path packer/ansible/roles --force
-```
-2. Create base ami
+
+1. Create base ami
 ```
 cd  packer
 packer build -var-file="config/aws.json" corda_base_ami.json
 ```
-3. Create Corda ami
+2. Create Corda ami
 ```
 cd packer (if you are not already in the directory)
 packer build -var-file="config/aws.json" corda_ami.json
