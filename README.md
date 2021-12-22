@@ -195,7 +195,7 @@ Once your environment is up and running you can load your own cordapps by runnin
 # Troubleshooting
 
 In order to troubleshoot any issues with your docker containers you can run the following commands
-
+```
 sudo docker ps -a
 
 sudo docker container ps -a - shows all containers running or nor running
@@ -213,7 +213,7 @@ sudo docker container prune - removes all stopped containers
 sudo docker system df - shows disk usage of docker image
 sudo docker logs -f IMAGE ID - shows you the logs of the running container
 sudo docker stats CONTAINER ID - provides statistics such as CPU%, MEM Usage
-
+```
 The docker container names can be used instead of the Container ID's e.g. partya, partyb, grafana, kibana, notary
 
 The most common commands you are likely to use are:
